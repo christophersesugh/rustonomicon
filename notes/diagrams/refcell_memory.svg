@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350">
+  <defs>
+    <style>
+      .box { fill: #f0f4f8; stroke: #334e68; stroke-width: 2; rx: 4; }
+      .text { font-family: monospace; font-size: 14px; fill: #102a43; }
+      .title { font-family: sans-serif; font-weight: bold; font-size: 16px; fill: #102a43; }
+      .arrow { stroke: #d64545; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+  </defs>
+
+  <text x="300" y="40" class="title" text-anchor="middle">RefCell Memory Layout (Stack or Heap)</text>
+  
+  <rect x="200" y="70" width="200" height="200" class="box" />
+  
+  <rect x="220" y="100" width="160" height="60" class="box" fill="#e0e8f0" />
+  <text x="300" y="125" class="text" text-anchor="middle">borrow: Cell&lt;isize&gt;</text>
+  <text x="300" y="145" class="text" text-anchor="middle" font-size="12px">0 (unborrowed)</text>
+
+  <rect x="220" y="180" width="160" height="70" class="box" fill="#e0e8f0" />
+  <text x="300" y="215" class="text" text-anchor="middle">value: UnsafeCell&lt;T&gt;</text>
+  <text x="300" y="235" class="text" text-anchor="middle" font-size="12px">T (Data)</text>
+
+  <text x="300" y="300" class="text" text-anchor="middle" font-size="12px">borrow() -> increment to > 0 (returns Ref&lt;T&gt;)</text>
+  <text x="300" y="320" class="text" text-anchor="middle" font-size="12px">borrow_mut() -> set to -1 (returns RefMut&lt;T&gt;)</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 420">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="425" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">Rust Multithreaded Web Server: ThreadPool Architecture</text>
+
+  <!-- Client Requests -->
+  <g transform="translate(30, 70)">
+    <rect width="130" height="50" rx="8" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+    <text x="65" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#01579b">TCP Stream 1</text>
+  </g>
+  <g transform="translate(30, 140)">
+    <rect width="130" height="50" rx="8" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+    <text x="65" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#01579b">TCP Stream 2</text>
+  </g>
+  <g transform="translate(30, 210)">
+    <rect width="130" height="50" rx="8" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+    <text x="65" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#01579b">TCP Stream 3</text>
+  </g>
+
+  <!-- Main Thread & Sender -->
+  <g transform="translate(220, 100)">
+    <rect width="170" height="130" rx="10" fill="#fff3e0" stroke="#f57c00" stroke-width="2"/>
+    <text x="85" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="bold" fill="#e65100">Main Thread</text>
+    <text x="85" y="55" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555">TcpListener Loop</text>
+    <rect x="20" y="70" width="130" height="40" rx="6" fill="#ffe0b2" stroke="#fb8c00" stroke-width="1.5"/>
+    <text x="85" y="95" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#bf360c">Sender&lt;Job&gt;</text>
+  </g>
+
+  <!-- Arrows from Streams to Main Thread -->
+  <line x1="160" y1="95" x2="220" y2="135" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="160" y1="165" x2="220" y2="165" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="160" y1="235" x2="220" y2="195" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Shared Channel Receiver -->
+  <g transform="translate(440, 115)">
+    <rect width="170" height="100" rx="10" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+    <text x="85" y="28" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#311b92">Job Queue (mpsc)</text>
+    <rect x="15" y="45" width="140" height="40" rx="6" fill="#d1c4e9" stroke="#7e57c2" stroke-width="1.5"/>
+    <text x="70" y="70" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#1a237e">Arc&lt;Mutex&lt;Receiver&gt;&gt;</text>
+  </g>
+
+  <!-- Arrow Main Thread Sender -> Queue -->
+  <line x1="390" y1="165" x2="440" y2="165" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="415" y="155" text-anchor="middle" font-family="monospace" font-size="11" fill="#bf360c">Job</text>
+
+  <!-- Workers -->
+  <g transform="translate(670, 50)">
+    <rect width="150" height="55" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="75" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">Worker 0</text>
+    <text x="75" y="45" text-anchor="middle" font-family="monospace" font-size="11" fill="#388e3c">OS Thread 1</text>
+  </g>
+  <g transform="translate(670, 125)">
+    <rect width="150" height="55" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="75" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">Worker 1</text>
+    <text x="75" y="45" text-anchor="middle" font-family="monospace" font-size="11" fill="#388e3c">OS Thread 2</text>
+  </g>
+  <g transform="translate(670, 200)">
+    <rect width="150" height="55" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="75" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">Worker 2</text>
+    <text x="75" y="45" text-anchor="middle" font-family="monospace" font-size="11" fill="#388e3c">OS Thread 3</text>
+  </g>
+  <g transform="translate(670, 275)">
+    <rect width="150" height="55" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="75" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">Worker 3</text>
+    <text x="75" y="45" text-anchor="middle" font-family="monospace" font-size="11" fill="#388e3c">OS Thread 4</text>
+  </g>
+
+  <!-- Arrows Queue -> Workers -->
+  <line x1="610" y1="140" x2="670" y2="80" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="610" y1="155" x2="670" y2="145" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="610" y1="175" x2="670" y2="220" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="610" y1="190" x2="670" y2="295" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Footer Banner -->
+  <g transform="translate(50, 365)">
+    <rect width="750" height="40" rx="6" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+    <text x="375" y="25" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#616161">
+      Safe concurrent dispatch: Main thread sends jobs via unbounded Sender; Workers safely lock Mutex to pop next Job.
+    </text>
+  </g>
+</svg>

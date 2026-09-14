@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+  <!-- Senders -->
+  <g transform="translate(50, 50)">
+    <rect width="150" height="60" rx="10" fill="#e2f0cb" stroke="#7cb342" stroke-width="2"/>
+    <text x="75" y="35" text-anchor="middle" font-family="sans-serif" font-size="16">Thread 1 (Sender)</text>
+  </g>
+  <g transform="translate(50, 150)">
+    <rect width="150" height="60" rx="10" fill="#e2f0cb" stroke="#7cb342" stroke-width="2"/>
+    <text x="75" y="35" text-anchor="middle" font-family="sans-serif" font-size="16">Thread 2 (Sender)</text>
+  </g>
+  <g transform="translate(50, 250)">
+    <rect width="150" height="60" rx="10" fill="#e2f0cb" stroke="#7cb342" stroke-width="2"/>
+    <text x="75" y="35" text-anchor="middle" font-family="sans-serif" font-size="16">Thread N (Sender)</text>
+  </g>
+  <!-- Channel -->
+  <g transform="translate(300, 120)">
+    <rect width="200" height="120" rx="10" fill="#fff9c4" stroke="#fbc02d" stroke-width="2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold">MPSC Channel</text>
+    <rect x="20" y="50" width="40" height="40" fill="#fff" stroke="#ccc"/>
+    <rect x="60" y="50" width="40" height="40" fill="#fff" stroke="#ccc"/>
+    <rect x="100" y="50" width="40" height="40" fill="#fff" stroke="#ccc"/>
+    <rect x="140" y="50" width="40" height="40" fill="#fff" stroke="#ccc"/>
+    <text x="100" y="75" text-anchor="middle" font-family="sans-serif" font-size="12">Message Queue</text>
+  </g>
+  <!-- Receiver -->
+  <g transform="translate(600, 150)">
+    <rect width="150" height="60" rx="10" fill="#ffccbc" stroke="#f4511e" stroke-width="2"/>
+    <text x="75" y="35" text-anchor="middle" font-family="sans-serif" font-size="16">Thread (Receiver)</text>
+  </g>
+  <!-- Arrows -->
+  <line x1="200" y1="80" x2="300" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="200" y1="180" x2="300" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="200" y1="280" x2="300" y2="220" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="500" y1="180" x2="600" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

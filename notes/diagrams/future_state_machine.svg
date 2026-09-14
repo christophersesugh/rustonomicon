@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <!-- Styles -->
+  <style>
+    .box { fill: #f8f9fa; stroke: #343a40; stroke-width: 2; rx: 5; ry: 5; }
+    .text-title { font-family: monospace; font-size: 16px; font-weight: bold; fill: #212529; }
+    .text { font-family: monospace; font-size: 14px; fill: #495057; }
+    .arrow { stroke: #495057; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    .code { font-family: monospace; font-size: 12px; fill: #e83e8c; font-weight: bold; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#495057" />
+    </marker>
+  </defs>
+
+  <!-- Async Function Box -->
+  <rect x="50" y="50" width="300" height="150" class="box" />
+  <text x="60" y="80" class="text-title">async fn fetch_data() {</text>
+  <text x="70" y="100" class="text">    let a = do_step_1().await;</text>
+  <text x="70" y="120" class="text">    let b = do_step_2(a).await;</text>
+  <text x="70" y="140" class="text">    return b;</text>
+  <text x="60" y="160" class="text-title">}</text>
+
+  <!-- Arrow -->
+  <path d="M 360 125 L 440 125" class="arrow" />
+  <text x="400" y="115" class="code" text-anchor="middle">Desugars to</text>
+
+  <!-- State Machine Box -->
+  <rect x="450" y="30" width="320" height="220" class="box" />
+  <text x="460" y="60" class="text-title">enum FetchDataStateMachine {</text>
+  <text x="470" y="90" class="text">    // Start of function</text>
+  <text x="470" y="110" class="text">    Start,</text>
+  <text x="470" y="140" class="text">    // Suspended at first .await</text>
+  <text x="470" y="160" class="text">    WaitingForStep1,</text>
+  <text x="470" y="190" class="text">    // Suspended at second .await</text>
+  <text x="470" y="210" class="text">    WaitingForStep2 { a: Data },</text>
+  <text x="460" y="240" class="text-title">}</text>
+</svg>

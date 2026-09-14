@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350">
+  <defs>
+    <style>
+      .box { fill: #f0f4f8; stroke: #334e68; stroke-width: 2; rx: 4; }
+      .text { font-family: monospace; font-size: 14px; fill: #102a43; }
+      .title { font-family: sans-serif; font-weight: bold; font-size: 16px; fill: #102a43; }
+      .arrow { stroke: #d64545; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#d64545" />
+    </marker>
+  </defs>
+
+  <text x="100" y="40" class="title" text-anchor="middle">Stack</text>
+  <rect x="20" y="60" width="160" height="240" class="box" />
+  
+  <rect x="40" y="80" width="120" height="40" class="box" fill="#e0e8f0" />
+  <text x="100" y="105" class="text" text-anchor="middle">rc1: Rc&lt;T&gt;</text>
+  <rect x="40" y="120" width="120" height="40" class="box" fill="#e0e8f0" />
+  <text x="100" y="145" class="text" text-anchor="middle">ptr</text>
+
+  <rect x="40" y="200" width="120" height="40" class="box" fill="#e0e8f0" />
+  <text x="100" y="225" class="text" text-anchor="middle">rc2: Rc&lt;T&gt;</text>
+  <rect x="40" y="240" width="120" height="40" class="box" fill="#e0e8f0" />
+  <text x="100" y="265" class="text" text-anchor="middle">ptr</text>
+
+  <text x="450" y="40" class="title" text-anchor="middle">Heap</text>
+  <rect x="350" y="60" width="200" height="220" class="box" stroke-dasharray="5,5" />
+  
+  <rect x="370" y="80" width="160" height="40" class="box" fill="#e0e8f0" />
+  <text x="450" y="105" class="text" text-anchor="middle">strong_count: 2</text>
+  
+  <rect x="370" y="120" width="160" height="40" class="box" fill="#e0e8f0" />
+  <text x="450" y="145" class="text" text-anchor="middle">weak_count: 0</text>
+  
+  <rect x="370" y="160" width="160" height="100" class="box" fill="#e0e8f0" />
+  <text x="450" y="210" class="text" text-anchor="middle">T (Data)</text>
+
+  <path d="M 160 140 C 250 140, 250 100, 360 100" class="arrow" />
+  <path d="M 160 260 C 250 260, 250 120, 360 120" class="arrow" />
+</svg>

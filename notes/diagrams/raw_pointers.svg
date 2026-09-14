@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <style>
+      .box { fill: #f0f4f8; stroke: #3b82f6; stroke-width: 2; rx: 8; }
+      .title { font-family: monospace; font-size: 16px; font-weight: bold; fill: #1e3a8a; }
+      .text { font-family: monospace; font-size: 14px; fill: #333; }
+      .danger { fill: #fef2f2; stroke: #ef4444; stroke-width: 2; rx: 8; }
+      .danger-text { font-family: monospace; font-size: 14px; fill: #b91c1c; }
+      .arrow { stroke: #6b7280; stroke-width: 2; marker-end: url(#arrowhead); }
+      .danger-arrow { stroke: #ef4444; stroke-width: 2; marker-end: url(#arrowhead-danger); stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+    <marker id="arrowhead-danger" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold">Safe References vs Raw Pointers</text>
+
+  <!-- Safe Reference Side -->
+  <rect x="50" y="60" width="300" height="300" class="box" />
+  <text x="200" y="90" text-anchor="middle" class="title">Safe References (&amp;T, &amp;mut T)</text>
+  
+  <rect x="70" y="120" width="120" height="50" fill="#e0e7ff" stroke="#4f46e5" rx="4" />
+  <text x="130" y="145" text-anchor="middle" class="text">Reference R</text>
+  <text x="130" y="160" text-anchor="middle" font-size="10" fill="#666">Lifetime: 'a</text>
+
+  <rect x="70" y="220" width="120" height="50" fill="#e0e7ff" stroke="#4f46e5" rx="4" />
+  <text x="130" y="245" text-anchor="middle" class="text">Data T</text>
+  <text x="130" y="260" text-anchor="middle" font-size="10" fill="#666">Lifetime: 'b</text>
+
+  <line x1="130" y1="175" x2="130" y2="215" class="arrow" />
+
+  <text x="200" y="320" text-anchor="middle" class="text" font-size="12">Compiler checks 'a ≤ 'b</text>
+  <text x="200" y="340" text-anchor="middle" class="text" font-size="12">Guaranteed Valid &amp; Aligned</text>
+
+  <!-- Raw Pointer Side -->
+  <rect x="450" y="60" width="300" height="300" class="danger" />
+  <text x="600" y="90" text-anchor="middle" class="title" fill="#991b1b">Raw Pointers (*const T, *mut T)</text>
+  
+  <rect x="470" y="120" width="120" height="50" fill="#fee2e2" stroke="#dc2626" rx="4" />
+  <text x="530" y="145" text-anchor="middle" class="danger-text">Pointer P</text>
+  <text x="530" y="160" text-anchor="middle" font-size="10" fill="#666">No lifetime</text>
+
+  <rect x="470" y="220" width="120" height="50" fill="#fee2e2" stroke="#dc2626" rx="4" stroke-dasharray="2,2" />
+  <text x="530" y="245" text-anchor="middle" class="danger-text">??? Memory</text>
+  <text x="530" y="260" text-anchor="middle" font-size="10" fill="#666">Unknown State</text>
+
+  <line x1="530" y1="175" x2="530" y2="215" class="danger-arrow" />
+  
+  <path d="M 590 145 C 650 145, 650 245, 700 245" fill="none" class="danger-arrow" />
+  <text x="680" y="260" class="danger-text" font-size="10">NULL or Invalid</text>
+
+  <text x="600" y="320" text-anchor="middle" class="danger-text" font-size="12">No Compiler Checks</text>
+  <text x="600" y="340" text-anchor="middle" class="danger-text" font-size="12">Requires `unsafe` to deref</text>
+
+</svg>

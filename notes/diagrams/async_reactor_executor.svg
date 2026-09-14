@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <style>
+    .box { fill: #e9ecef; stroke: #343a40; stroke-width: 2; rx: 8; ry: 8; }
+    .title { font-family: sans-serif; font-size: 18px; font-weight: bold; fill: #212529; text-anchor: middle; }
+    .text { font-family: sans-serif; font-size: 14px; fill: #495057; text-anchor: middle; }
+    .arrow { stroke: #007bff; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+    .arrow-text { font-family: sans-serif; font-size: 14px; font-weight: bold; fill: #007bff; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#007bff" />
+    </marker>
+  </defs>
+
+  <!-- Executor -->
+  <rect x="50" y="50" width="250" height="150" class="box" />
+  <text x="175" y="80" class="title">Executor (Runtime)</text>
+  <text x="175" y="110" class="text">1. Polls Future</text>
+  <text x="175" y="130" class="text">4. Schedules &amp; Repolls Future</text>
+
+  <!-- Future Task -->
+  <rect x="500" y="50" width="250" height="150" class="box" />
+  <text x="625" y="80" class="title">Future (Task)</text>
+  <text x="625" y="110" class="text">Returns Poll::Pending</text>
+  <text x="625" y="130" class="text">if not ready</text>
+
+  <!-- Reactor -->
+  <rect x="275" y="300" width="250" height="150" class="box" />
+  <text x="400" y="330" class="title">Reactor (OS I/O)</text>
+  <text x="400" y="360" class="text">epoll / kqueue / IOCP</text>
+  <text x="400" y="380" class="text">Waits for I/O completion</text>
+  <text x="400" y="420" class="text">3. Triggers Waker</text>
+
+  <!-- Arrows -->
+  <!-- Executor to Future -->
+  <path d="M 300 100 L 490 100" class="arrow" />
+  <text x="400" y="90" class="arrow-text">poll()</text>
+
+  <!-- Future to Executor (Pending) -->
+  <path d="M 500 130 L 310 130" class="arrow" />
+  <text x="400" y="150" class="arrow-text">Poll::Pending</text>
+
+  <!-- Future to Reactor -->
+  <path d="M 625 200 L 525 300" class="arrow" />
+  <text x="610" y="260" class="arrow-text">2. Registers Waker</text>
+  
+  <!-- Reactor to Executor -->
+  <path d="M 275 350 L 175 200" class="arrow" />
+  <text x="180" y="290" class="arrow-text">wake() signals Executor</text>
+</svg>

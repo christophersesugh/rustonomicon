@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 450" width="500" height="450">
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#C62828" />
+        </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="white"/>
+    
+    <text x="250" y="30" font-family="'Segoe UI', Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Stack (Grows Downward)</text>
+    
+    <g transform="translate(100, 60)">
+        <rect x="0" y="0" width="250" height="70" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+        <text x="125" y="30" font-family="'Segoe UI', Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">main()</text>
+        <text x="125" y="55" font-family="'Segoe UI', Arial, sans-serif" font-size="12" text-anchor="middle" font-style="italic">drops vars</text>
+    </g>
+    
+    <g transform="translate(100, 160)">
+        <rect x="0" y="0" width="250" height="70" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+        <text x="125" y="30" font-family="'Segoe UI', Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">do_work()</text>
+        <text x="125" y="55" font-family="'Segoe UI', Arial, sans-serif" font-size="12" text-anchor="middle" font-style="italic">drops vars</text>
+    </g>
+    
+    <g transform="translate(100, 260)">
+        <rect x="0" y="0" width="250" height="70" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+        <text x="125" y="30" font-family="'Segoe UI', Arial, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">calculate()</text>
+        <text x="125" y="55" font-family="'Segoe UI', Arial, sans-serif" font-size="14" text-anchor="middle" font-weight="bold" fill="#C62828">Panic starts here!</text>
+    </g>
+    
+    <path d="M 60 295 L 60 215" fill="none" stroke="#C62828" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+    <path d="M 60 195 L 60 115" fill="none" stroke="#C62828" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+    
+    <text x="45" y="210" font-family="'Segoe UI', Arial, sans-serif" font-size="14" text-anchor="end" fill="#C62828" transform="rotate(-90 45,210)">Unwinding</text>
+</svg>
