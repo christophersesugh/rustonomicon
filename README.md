@@ -32,7 +32,7 @@ Hands-on Rust exercises ranging from beginner to advanced:
 - **Intermediate** — structs, enums, collections, error handling, traits, generics, testing
 - **Advanced** — lifetimes, closures, iterators, smart pointers, concurrency, pattern matching
 
-Each challenge file contains 5-8 exercises with `todo!()` bodies, clear instructions, and test cases. Complete them all and you'll be confident writing Rust code.
+Each topic challenge contains focused exercises with `todo!()` bodies, clear instructions, and test cases. After the drills, build the staged [mini-projects](./challenges/04_projects/) to turn concepts into durable coding habits.
 
 ## Chapter Index
 

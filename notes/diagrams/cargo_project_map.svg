@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 300" role="img" aria-labelledby="title desc">
+  <title id="title">A Rust Cargo project's basic structure</title>
+  <desc id="desc">Cargo reads Cargo.toml, compiles source files, and creates a runnable binary in target.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7 z" fill="#374151"/></marker>
+    <style>text{font-family:system-ui,-apple-system,sans-serif;fill:#172033}.title{font-size:18px;font-weight:700}.label{font-size:15px;font-weight:600}.small{font-size:13px}</style>
+  </defs>
+  <rect width="860" height="300" fill="#ffffff"/>
+  <text x="430" y="32" text-anchor="middle" class="title">What Cargo does with a Rust project</text>
+  <rect x="35" y="75" width="210" height="155" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="140" y="106" text-anchor="middle" class="label">Your project folder</text>
+  <text x="62" y="142" class="small">Cargo.toml</text>
+  <text x="62" y="172" class="small">src/main.rs</text>
+  <text x="62" y="202" class="small">src/lib.rs (optional)</text>
+  <path d="M255 153 H357" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="370" y="102" width="145" height="100" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="442" y="142" text-anchor="middle" class="label">Cargo + rustc</text>
+  <text x="442" y="169" text-anchor="middle" class="small">check, compile, link</text>
+  <path d="M525 153 H627" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="640" y="75" width="185" height="155" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="732" y="108" text-anchor="middle" class="label">target/debug/</text>
+  <text x="732" y="145" text-anchor="middle" class="small">native executable</text>
+  <text x="732" y="172" text-anchor="middle" class="small">ready for your OS</text>
+  <text x="430" y="270" text-anchor="middle" class="small">`cargo run` performs the middle step, then starts the executable.</text>
+</svg>

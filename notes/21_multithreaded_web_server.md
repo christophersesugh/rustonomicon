@@ -1,82 +1,104 @@
-# 21. Multithreaded Web Server
+# 21. Capstone: A Multithreaded Web Server
 
-In this capstone project, we apply Rust's concurrency, memory management, and typing models to build a functional multithreaded web server from scratch.
+This project makes a tiny HTTP server using only the standard library. It is a learning server, not a production-ready public server: real servers need careful HTTP parsing, timeouts, TLS, observability, and resource limits. Its value is seeing how ownership, threads, channels, trait objects, and `Drop` work together.
 
-## 1. The Goal
-Our goal is to build an HTTP server listening on TCP port `7878`, using only the Rust standard library (`std::net`). 
+## The goal
 
-### TS Analogy
-In Node.js/TypeScript, you'd typically use `http.createServer()` or Express. Under the hood, Node.js binds to a TCP socket and parses HTTP text over the stream, using an event loop (libuv) to handle concurrency. In Rust, we will interact directly with the raw TCP streams and manually implement a Thread Pool to mimic concurrent handling.
+Listen on `127.0.0.1:7878`, answer a few browser requests, and keep a deliberately slow request from blocking every other request.
 
-## 2. Single-Threaded Server
-We start by binding to a port and listening for raw bytes.
+In Node.js, `http.createServer` hides the TCP socket and event loop. Here `TcpListener` exposes a stream of incoming TCP connections. HTTP is text sent over that stream:
+
+```text
+HTTP/1.1 200 OK\r\n
+Content-Length: 11\r\n
+\r\n
+Hello world
+```
+
+The blank line separates headers from the response body. `Content-Length` is the byte length of the body, not the number of characters a human sees.
+
+## First: serve one request at a time
 
 ```rust
-use std::net::TcpListener;
+use std::io::{BufRead, BufReader, Write};
+use std::net::{TcpListener, TcpStream};
+
+fn handle_connection(mut stream: TcpStream) {
+    let request_line = BufReader::new(&stream).lines().next().unwrap().unwrap();
+    println!("{request_line}");
+
+    let body = "Hello world";
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{body}",
+        body.len()
+    );
+    stream.write_all(response.as_bytes()).unwrap();
+}
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
-    // Iterate over incoming connections
     for stream in listener.incoming() {
-        let stream = stream.unwrap();
-        // Handle the raw TCP stream here
+        handle_connection(stream.unwrap());
     }
 }
 ```
 
-An HTTP response is just text sent over this stream in a specific format:
-```text
-HTTP/1.1 200 OK\r\n\r\nHello Web!
-```
+`TcpStream` owns an operating-system socket handle. Dropping the stream closes that handle. `BufReader` temporarily borrows the stream and adds a buffer so reading text lines is efficient.
 
-## 3. The Bottleneck
-If we handle each request synchronously (e.g., reading a file and writing back), a slow request (like a route `/sleep` that sleeps for 5 seconds) will block the main thread.
-Because TCP connections queue up sequentially in a single-threaded server, no other user can get a response until the sleeping route finishes.
+## Why one slow request is a problem
 
-## 4. Building a `ThreadPool`
+If `/sleep` takes five seconds, a single-threaded loop cannot begin the next connection until that handler returns. Spawning an OS thread for every request avoids that particular wait, but an unbounded flood of requests could consume memory and CPU creating unbounded threads.
 
-To process requests concurrently, why not spawn a new OS thread for every incoming connection?
-```rust
-// BAD IDEA IN PRODUCTION
-std::thread::spawn(|| { handle_connection(stream); });
-```
-**Resource Exhaustion:** If an attacker sends 100,000 requests (Denial of Service), your OS tries to create 100,000 threads. Each thread requires memory (stack space) and CPU context-switching overhead. Your server will crash.
+A **thread pool** chooses a fixed number of worker threads at startup. The listener turns each connection into a job; a worker takes one job from a queue and executes it.
 
-### The Solution: A Thread Pool
-Instead, we spawn a *fixed* number of threads (Worker pool) at startup (e.g., 4 threads). Incoming requests are bundled as `Job`s and sent into a queue. Idle workers pull from the queue.
+![Thread-pool flow](./diagrams/thread_pool.svg)
 
-![ThreadPool Architecture](./diagrams/thread_pool.svg)
+## What a job type means
 
-### Passing Jobs to Workers
-We need a way for the main thread to send closures (jobs) to the workers. We use a **Channel** (`mpsc`).
-To share the receiving end of the channel among multiple workers safely, we use:
-`Arc<Mutex<mpsc::Receiver<Job>>>`
-- `Arc`: Atomic Reference Counted (so multiple workers can own a reference to the receiver).
-- `Mutex`: Mutual Exclusion (only one worker can pop a job from the channel at a time).
-
-### Defining a `Job`
-A `Job` is just a closure that we want to execute later.
 ```rust
 type Job = Box<dyn FnOnce() + Send + 'static>;
 ```
-- `Box<dyn ...>`: Trait object. Since closures have different sizes, we put them on the heap (`Box`) and use dynamic dispatch (`dyn`).
-- `FnOnce()`: The closure takes no arguments and is executed exactly once.
-- `Send`: Can be transferred across thread boundaries safely.
-- `'static`: The closure might live arbitrarily long, so it shouldn't borrow local stack variables that might get dropped.
 
-## 5. Graceful Shutdown
+Read it from inside out:
 
-When we shut down the server, we want workers to finish their current jobs before exiting.
-1. **Drop the Sender:** We drop the `mpsc::Sender` in the main thread. This closes the channel.
-2. **Workers Exit:** The workers, constantly calling `receiver.lock().unwrap().recv()`, will receive an error because the channel is closed. We configure them to `break` their infinite loop upon this error.
-3. **Join Threads:** In the `Drop` implementation for our `ThreadPool`, we iterate through all our workers and call `worker.thread.join().unwrap()` to wait for them to finish naturally.
+- `FnOnce()` is a no-argument closure that can run once.
+- `dyn FnOnce()` allows jobs made from different closure types.
+- `Box` puts that unknown-size closure behind a known-size pointer.
+- `Send` proves it is safe to transfer the job to another thread.
+- `'static` means the job owns what it needs (or borrows only data that truly lasts for the entire program). A queued job must not borrow a local variable that will disappear before a worker runs it.
 
----
+The `Box` pointer itself is stored in the channel queue. The closure environment it points to is typically stored on the heap. A worker removes that pointer, calls the closure, and then the closure's captured values are dropped.
 
-## References
-file:///Users/codingsimba/.rustup/toolchains/stable-x86_64-apple-darwin/share/doc/rust/html/book/ch21-00-final-project-a-web-server.html
-file:///Users/codingsimba/.rustup/toolchains/stable-x86_64-apple-darwin/share/doc/rust/html/book/ch21-01-single-threaded.html
-file:///Users/codingsimba/.rustup/toolchains/stable-x86_64-apple-darwin/share/doc/rust/html/book/ch21-02-multithreaded.html
-file:///Users/codingsimba/.rustup/toolchains/stable-x86_64-apple-darwin/share/doc/rust/html/book/ch21-03-graceful-shutdown-and-cleanup.html
+## Why workers share `Arc<Mutex<Receiver<Job>>>`
 
+`mpsc` means many producers, single consumer. The listener owns a cloneable `Sender<Job>`; each worker needs access to the one `Receiver<Job>`.
+
+```text
+listener ── Sender<Job> ──▶ queue ◀── Mutex ◀── Arc clones ── workers
+```
+
+- `Arc` gives several threads shared ownership of the receiver wrapper.
+- `Mutex` lets only one worker call `recv()` on that receiver at a time.
+- The worker releases the lock before running the job. Holding the lock during the job would accidentally make all work serial again.
+
+## Shut down cleanly
+
+The pool should not leave worker threads running when the pool is dropped:
+
+1. Drop every `Sender<Job>` so the channel is closed.
+2. A waiting worker receives an error, leaves its loop, and finishes.
+3. Join each worker thread in `Drop` before the pool is gone.
+
+This ordering matters. Joining a worker before closing the last sender can wait forever, because the worker is still waiting for a job.
+
+## Build order and checks
+
+1. Bind a listener and print the first request line.
+2. Return one fixed `200 OK` response.
+3. Serve `hello.html` and `404.html` based on the route.
+4. Add a `/sleep` route to show the serial bottleneck.
+5. Build a two-worker pool and enqueue connections.
+6. Make shutdown join the workers without hanging.
+
+Use the full project brief at [Tiny Web Server](../challenges/04_projects/07_tiny_web_server.md) to turn these steps into your final project.
