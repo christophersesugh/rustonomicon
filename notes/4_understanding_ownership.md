@@ -9,6 +9,7 @@ Rust handles memory differently. Memory is managed through a system of ownership
 
 ### Ownership Rules
 These are the three golden rules of ownership in Rust:
+
 1. **Each value in Rust has an owner.**
 2. **There can only be one owner at a time.**
 3. **When the owner goes out of scope, the value will be dropped.**
@@ -34,6 +35,7 @@ let s = String::from("hello"); // allocated on the heap
 When a variable goes out of scope, Rust automatically calls a special function called `drop` and returns the memory to the allocator.
 
 A `String` is made up of three parts, stored on the **stack**:
+
 1. A pointer to the memory that holds the contents of the string.
 2. A length (how much memory in bytes the contents currently use).
 3. A capacity (total amount of memory in bytes that the `String` has received from the allocator).

@@ -21,20 +21,27 @@ pub fn exercise_2() -> i32 {
 /// Exercise 3: Shadowing
 /// Declare a variable `x` with value 5. Shadow it with a new `x` that multiplies the previous by 2, and return it.
 pub fn exercise_3() -> i32 {
-    todo!()
+    let x = 5;
+    let x = x * 2;
+    x
 }
 
 /// Exercise 4: Constants
 /// Define a constant `MAX_SPEED` of type u32 set to 120 and return it.
 pub fn exercise_4() -> u32 {
-    todo!()
+    const MAX_SPEED: u32 = 120;
+    MAX_SPEED
 }
 
 /// Exercise 5: Scope and Shadowing
-/// Declare `x` as 10. Open a block scope where you shadow `x` to be 20. 
+/// Declare `x` as 10. Open a block scope where you shadow `x` to be 20.
 /// Return the `x` from the outer scope after the block ends.
 pub fn exercise_5() -> i32 {
-    todo!()
+    let x = 10;
+    {
+        let x = 20;
+    }
+    x
 }
 
 fn main() {

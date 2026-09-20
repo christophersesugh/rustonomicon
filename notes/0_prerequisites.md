@@ -52,6 +52,7 @@ The **Heap** is a less organized, massive pool of memory used for data whose siz
 When you need heap memory, you ask the operating system for a certain amount of space. The OS finds a big enough empty spot, marks it as "in use", and hands you back a **pointer** (the memory address of where that spot starts).
 
 **Why is it slower than the stack?**
+
 1. **Allocation overhead:** The OS has to search for contiguous free space.
 2. **Pointer chasing:** To get your data, you first go to the stack to get the pointer, and then follow that pointer to the heap.
 
@@ -155,6 +156,7 @@ While RAM (Stack/Heap) is where your data lives, the CPU cannot do math directly
 Registers are ultra-fast, tiny storage locations built directly into the CPU chip itself. A CPU only has a handful of them. 
 
 When you write `let c = a + b;`:
+
 1. The CPU loads `a` from the RAM/Cache into Register 1.
 2. The CPU loads `b` from the RAM/Cache into Register 2.
 3. The CPU's ALU (Arithmetic Logic Unit) adds Register 1 and Register 2, storing the result in Register 3.

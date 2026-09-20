@@ -31,10 +31,7 @@ struct Config {
 
 impl Config {
     fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
-        let ignore_case_arg = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get project name"),
-        };
+        args.next();
 
         let query = match args.next() {
             Some(arg) => arg,
@@ -48,13 +45,9 @@ impl Config {
 
         let ignore_case = args.next().unwrap_or_default();
 
-        let paths_len = ignore_case_arg.len();
-        let _project_path = &ignore_case_arg[13..paths_len];
-
-        let ignore_case_args = vec![String::from("--ignore-case"), String::from("-ic")];
-
-        let ignore_case =
-            ignore_case_args.contains(&ignore_case) || env::var("IGNORE_CASE").is_ok();
+        let ignore_case = ignore_case == String::from("--ignore-case")
+            || ignore_case == String::from("-ic")
+            || env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
             query,
