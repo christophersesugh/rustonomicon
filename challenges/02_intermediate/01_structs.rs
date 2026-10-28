@@ -14,13 +14,21 @@ pub struct User {
 
 /// Instantiate a new `User` with the provided parameters, setting `active: true` and `sign_in_count: 1`.
 pub fn build_user(email: String, username: String) -> User {
-    todo!()
+    User {
+        email,
+        username,
+        active: true,
+        sign_in_count: 1,
+    }
 }
 
 /// Exercise 2: Struct Update Syntax
 /// Return a new `User` with updated `email`, preserving `username`, `active`, and `sign_in_count` from `original`.
 pub fn update_user_email(original: User, new_email: String) -> User {
-    todo!()
+    User {
+        email: new_email,
+        ..original
+    }
 }
 
 /// Exercise 3: Tuple Structs
@@ -30,7 +38,7 @@ pub fn update_user_email(original: User, new_email: String) -> User {
 pub struct Color(pub u8, pub u8, pub u8);
 
 pub fn invert_color(color: Color) -> Color {
-    todo!()
+    Color(color.2, color.1, color.0)
 }
 
 /// Exercise 4 & 5: Struct Methods & Associated Constructors
@@ -43,22 +51,26 @@ pub struct Rectangle {
 impl Rectangle {
     /// Associated constructor function (like a static method `Rectangle.square(size)` in TS)
     pub fn square(size: u32) -> Self {
-        todo!()
+        Self {
+            width: size,
+            height: size,
+        }
     }
 
     /// Method borrowing `&self`: calculates the rectangle area
     pub fn area(&self) -> u32 {
-        todo!()
+        self.width * self.height
     }
 
     /// Method borrowing `&self`: returns true if self can hold another rectangle completely
     pub fn can_hold(&self, other: &Rectangle) -> bool {
-        todo!()
+        self.width > other.width && self.height > other.height
     }
 
     /// Method taking `&mut self`: scales both width and height by `factor`
     pub fn scale(&mut self, factor: u32) {
-        todo!()
+        self.width *= factor;
+        self.height *= factor;
     }
 }
 
@@ -103,9 +115,18 @@ mod tests {
 
     #[test]
     fn test_rectangle_methods() {
-        let rect1 = Rectangle { width: 30, height: 50 };
-        let rect2 = Rectangle { width: 10, height: 40 };
-        let rect3 = Rectangle { width: 60, height: 45 };
+        let rect1 = Rectangle {
+            width: 30,
+            height: 50,
+        };
+        let rect2 = Rectangle {
+            width: 10,
+            height: 40,
+        };
+        let rect3 = Rectangle {
+            width: 60,
+            height: 45,
+        };
 
         assert_eq!(rect1.area(), 1500);
         assert!(rect1.can_hold(&rect2));
